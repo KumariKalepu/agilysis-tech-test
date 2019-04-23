@@ -1,4 +1,65 @@
-<? php ?>
+<?php
+   
+   require 'assets/info.php';
+   
+   $eMailError = '';
+   $passwordError = '';
+   $EmailAddress  = '';
+   if(isset($_POST['submit']))
+   {
+       $isError = false;	// if validation fails, isError sets to true
+       $isValiedForm = false;	
+       $EmailAddress = trim($_POST['EmailAddress']);   
+	   
+	   //********* Form input validation begin *************//
+       if(empty($EmailAddress))
+       {
+           $eMailError = 'Enter Valied eMail id';
+           $isError = true;			
+       }
+	   elseif(!filter_var($EmailAddress, FILTER_VALIDATE_EMAIL))
+	   {
+		   $eMailError = 'Invalid email format';
+           $isError = true;		
+	   }
+       if(empty($_POST['password']))
+       {
+           $passwordError = 'Enter Password';
+           $isError = true;			
+       }  
+	   //********* Form input validation ends *************//
+	   
+       if(!$isError) // Validation successful, connect to database
+	   {
+		   $dbObj = new Database();		   
+		   $connection = $dbObj->getConnection();		   
+		   if(!$connection->connect_errno)
+		  {
+			try
+			{
+				 $userObj = $dbObj->getUserDetails($connection,$EmailAddress);	           
+				 if(($userObj->userID == $EmailAddress) and ($userObj->password == $_POST['password']) and (!is_null($userObj)))
+				 {
+					$_SESSION['UserID'] = $EmailAddress;
+					header('Location : home/index.php?value=21'); // sending default value of 21 to the fibonacci API(dashboard page)
+				 }
+				 else
+				 {
+					$passwordError = "Invalid Username or Password";
+				 }
+			}
+			catch(Exception $e)
+			{
+				$passwordError = "User doesnot exist";
+			}
+		  }	              
+		  $connection->close();
+	   }		  
+		   
+   }
+  
+   
+?>
 <!doctype html>
 <html lang="en">
    <head>
@@ -18,21 +79,23 @@
             <div class="main">
                <div class="col-md-6 col-sm-12">
                   <div class="login-form">
-                     <form>
+                     <form action="?" method="post">
                         <div class="form-group">
                            <label for="EmailAddress">Email Address</label>
-                           <input type="text" id="EmailAddress" class="form-control" placeholder="Email Address" >
+                           <input name="EmailAddress" type="text" id="EmailAddress" class="form-control" placeholder="Email Address" value='<?php echo htmlentities($EmailAddress)?>' >
+						   <small class="text-danger" ><?php echo $eMailError ?></small>
                         </div>
                         <div class="form-group">
                            <label>Password</label>
-                           <input type="password" id="Password" class="form-control" placeholder="Password" autocomplete="off">
+                           <input name="password" type="password" id="Password" class="form-control" placeholder="Password" autocomplete="off" >
+						   <small class="text-danger" ><?php echo $passwordError ?></small>
                         </div>
-                        <button type="submit" class="btn btn-black">Login</button>
+                        <button name="submit" type="submit" class="btn btn-black">Login</button>
                         <a href="register.php" class="btn btn-secondary">Register</a>
                      </form>
                   </div>
                </div>
-            </div>
+            </div>			
       <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

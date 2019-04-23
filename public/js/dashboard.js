@@ -1,10 +1,23 @@
 var ctx = document.getElementById("myChart");
-      var myChart = new Chart(ctx, {
+    
+	var Data    = new Array();
+	    urlData = document.getElementById("myChart").getAttribute("data");		
+	    urlData = urlData.slice(1);	 
+	    urlData = urlData.slice(0,urlData.length - 1);
+	       Data = urlData.split(',');
+	  
+	  var labelArray = new Array();
+	  for (index = 0; index < Data.length; index++) 
+	  { 
+              labelArray[index]= index;
+      }	  	
+	 
+	  var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+          labels: labelArray,
           datasets: [{
-            data: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34],
+            data: Data,
             lineTension: 0,
             backgroundColor: 'transparent',
             borderColor: '#007bff',

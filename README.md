@@ -22,4 +22,3 @@ You are free to use any tools that you wish to, but please do not use any PHP fr
 ## Test Instructions
 Please see the [Wiki](https://github.com/cm392352/agilysis-tech-test/wiki) for further instructions on completing the test.
 
-Initial upload
