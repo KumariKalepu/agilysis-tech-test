@@ -22,3 +22,19 @@ You are free to use any tools that you wish to, but please do not use any PHP fr
 ## Test Instructions
 Please see the [Wiki](https://github.com/cm392352/agilysis-tech-test/wiki) for further instructions on completing the test.
 
+## Notes - KK
+Test 1:
+
+Implemented required logic to create a new array and run the batch file runTests.bat.
+
+Results from the batch file were successful(OK).
+
+Test 2:
+
+All User Stories scenarios are covered and tested on IIS (Microsoft Edge).
+
+Created an "assets" folder and "info.php" file under assets folder to keep all common functions and database related activities at one place.
+
+Database connection is successful and test data is available in the database.
+
+Results are same as expected.
